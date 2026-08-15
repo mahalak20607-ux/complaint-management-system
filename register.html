@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | ComplainTrack</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* =========================
+           REGISTER PAGE
+        ========================= */
+
+        .register-page {
+            min-height: calc(100vh - 81px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 50px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7f9ff,
+                    #edf2ff
+                );
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 1050px;
+
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(40, 60, 100, 0.12);
+        }
+
+        /* =========================
+           LEFT PANEL
+        ========================= */
+
+        .register-info {
+            padding: 55px;
+
+            background: #3157d5;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .register-logo {
+            width: 50px;
+            height: 50px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: white;
+            color: #3157d5;
+
+            border-radius: 13px;
+
+            font-size: 23px;
+            font-weight: 700;
+
+            margin-bottom: 30px;
+        }
+
+        .register-info h1 {
+            font-size: 38px;
+
+            line-height: 1.15;
+
+            margin-bottom: 18px;
+        }
+
+        .register-info p {
+            color: rgba(255,255,255,0.82);
+
+            font-size: 14px;
+
+            margin-bottom: 35px;
+        }
+
+        .benefits {
+            display: flex;
+            flex-direction: column;
+
+            gap: 18px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 13px;
+        }
+
+        .benefit-icon {
+            width: 28px;
+            height: 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,0.18);
+
+            border-radius: 50%;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .register-form-section {
+            padding: 50px;
+        }
+
+        .register-form-section h2 {
+            font-size: 30px;
+
+            margin-bottom: 7px;
+        }
+
+        .register-subtitle {
+            color: #7b8494;
+
+            font-size: 13px;
+
+            margin-bottom: 28px;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: #333b4d;
+
+            margin-bottom: 7px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box span {
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #8992a3;
+
+            font-size: 15px;
+        }
+
+        .input-box input,
+        .input-box select {
+            width: 100%;
+
+            padding: 13px 14px 13px 40px;
+
+            border: 1px solid #dfe3eb;
+
+            border-radius: 8px;
+
+            outline: none;
+
+            font-size: 13px;
+
+            color: #252c3b;
+
+            background: white;
+
+            transition: 0.3s;
+        }
+
+        .input-box input:focus,
+        .input-box select:focus {
+            border-color: #3157d5;
+
+            box-shadow:
+                0 0 0 3px rgba(49,87,213,0.08);
+        }
+
+        .terms {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 8px;
+
+            margin: 22px 0;
+
+            font-size: 11px;
+
+            color: #737d8e;
+        }
+
+        .terms input {
+            margin-top: 2px;
+        }
+
+        .terms a {
+            color: #3157d5;
+
+            font-weight: 600;
+        }
+
+        .register-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #3157d5;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .register-btn:hover {
+            background: #2445b5;
+
+            transform: translateY(-1px);
+        }
+
+        .login-text {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #737d8e;
+
+            font-size: 13px;
+        }
+
+        .login-text a {
+            color: #3157d5;
+
+            font-weight: 600;
+        }
+
+        .back-home {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #7d8695;
+
+            font-size: 12px;
+        }
+
+        .back-home:hover {
+            color: #3157d5;
+        }
+
+
+        /* =========================
+           PASSWORD STRENGTH
+        ========================= */
+
+        .password-strength {
+            height: 4px;
+
+            width: 100%;
+
+            background: #edf0f4;
+
+            border-radius: 10px;
+
+            margin-top: 7px;
+
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+
+            width: 0%;
+
+            border-radius: 10px;
+
+            transition: 0.3s;
+        }
+
+        .strength-text {
+            display: block;
+
+            font-size: 10px;
+
+            color: #8a92a0;
+
+            margin-top: 4px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+
+            .register-info {
+                padding: 40px;
+            }
+
+            .register-form-section {
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .register-page {
+                padding: 25px 15px;
+            }
+
+            .register-info {
+                display: none;
+            }
+
+            .register-form-section {
+                padding: 30px 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                C
+            </div>
+
+            <div>
+                <h2>ComplainTrack</h2>
+                <span>Complaint Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= REGISTER ================= -->
+
+    <main class="register-page">
+
+        <div class="register-container">
+
+
+            <!-- LEFT SIDE -->
+
+            <section class="register-info">
+
+                <div class="register-logo">
+                    C
+                </div>
+
+                <h1>
+                    Create Your<br>
+                    Account
+                </h1>
+
+                <p>
+                    Join ComplainTrack and get a simple,
+                    transparent way to manage and track
+                    your complaints.
+                </p>
+
+
+                <div class="benefits">
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        Submit complaints easily
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        Track complaints in real time
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        Receive status updates
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        Provide feedback after resolution
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT SIDE -->
+
+            <section class="register-form-section">
+
+                <h2>Create Account</h2>
+
+                <p class="register-subtitle">
+                    Fill in your details to get started
+                </p>
+
+
+                <form id="registerForm">
+
+                    <div class="form-grid">
+
+
+                        <!-- FULL NAME -->
+
+                        <div class="form-group full">
+
+                            <label for="fullName">
+                                Full Name
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>👤</span>
+
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    placeholder="Enter your full name"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>✉</span>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="Enter email"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                Phone Number
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>☎</span>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    placeholder="Enter phone number"
+                                    maxlength="10"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="form-group full">
+
+                            <label for="department">
+                                Preferred Department
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>▣</span>
+
+                                <select id="department" required>
+
+                                    <option value="">
+                                        Select department
+                                    </option>
+
+                                    <option value="technical">
+                                        Technical Support
+                                    </option>
+
+                                    <option value="academic">
+                                        Academic Services
+                                    </option>
+
+                                    <option value="administration">
+                                        Administration
+                                    </option>
+
+                                    <option value="facility">
+                                        Facilities & Maintenance
+                                    </option>
+
+                                    <option value="other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>🔒</span>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    placeholder="Create password"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="password-strength">
+
+                                <div
+                                    class="strength-bar"
+                                    id="strengthBar"
+                                ></div>
+
+                            </div>
+
+                            <small
+                                class="strength-text"
+                                id="strengthText"
+                            >
+                                Password strength
+                            </small>
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="confirmPassword">
+                                Confirm Password
+                            </label>
+
+                            <div class="input-box">
+
+                                <span>🔐</span>
+
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    placeholder="Confirm password"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TERMS -->
+
+                    <label class="terms">
+
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            required
+                        >
+
+                        <span>
+                            I agree to the
+                            <a href="#">
+                                Terms of Service
+                            </a>
+                            and
+                            <a href="#">
+                                Privacy Policy
+                            </a>.
+                        </span>
+
+                    </label>
+
+
+                    <!-- BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="register-btn"
+                    >
+                        Create Account →
+                    </button>
+
+                </form>
+
+
+                <p class="login-text">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Sign In
+                    </a>
+
+                </p>
+
+
+                <a
+                    href="index.html"
+                    class="back-home"
+                >
+                    ← Back to Home
+                </a>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const password =
+            document.getElementById("password");
+
+        const strengthBar =
+            document.getElementById("strengthBar");
+
+        const strengthText =
+            document.getElementById("strengthText");
+
+
+        password.addEventListener(
+            "input",
+            function () {
+
+                const value = password.value;
+
+                let strength = 0;
+
+                if (value.length >= 6) {
+                    strength++;
+                }
+
+                if (/[A-Z]/.test(value)) {
+                    strength++;
+                }
+
+                if (/[0-9]/.test(value)) {
+                    strength++;
+                }
+
+                if (/[^A-Za-z0-9]/.test(value)) {
+                    strength++;
+                }
+
+
+                if (value.length === 0) {
+
+                    strengthBar.style.width = "0%";
+
+                    strengthText.textContent =
+                        "Password strength";
+
+                }
+
+                else if (strength <= 1) {
+
+                    strengthBar.style.width = "25%";
+
+                    strengthText.textContent =
+                        "Weak password";
+
+                }
+
+                else if (strength === 2) {
+
+                    strengthBar.style.width = "50%";
+
+                    strengthText.textContent =
+                        "Medium password";
+
+                }
+
+                else if (strength === 3) {
+
+                    strengthBar.style.width = "75%";
+
+                    strengthText.textContent =
+                        "Good password";
+
+                }
+
+                else {
+
+                    strengthBar.style.width = "100%";
+
+                    strengthText.textContent =
+                        "Strong password";
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           REGISTER FORM
+        ========================= */
+
+        document
+            .getElementById("registerForm")
+            .addEventListener(
+                "submit",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    const fullName =
+                        document.getElementById(
+                            "fullName"
+                        ).value.trim();
+
+                    const email =
+                        document.getElementById(
+                            "email"
+                        ).value.trim();
+
+                    const phone =
+                        document.getElementById(
+                            "phone"
+                        ).value.trim();
+
+                    const department =
+                        document.getElementById(
+                            "department"
+                        ).value;
+
+                    const passwordValue =
+                        document.getElementById(
+                            "password"
+                        ).value;
+
+                    const confirmPassword =
+                        document.getElementById(
+                            "confirmPassword"
+                        ).value;
+
+
+                    if (
+                        !fullName ||
+                        !email ||
+                        !phone ||
+                        !department ||
+                        !passwordValue ||
+                        !confirmPassword
+                    ) {
+
+                        alert(
+                            "Please fill in all fields."
+                        );
+
+                        return;
+                    }
+
+
+                    if (phone.length !== 10) {
+
+                        alert(
+                            "Please enter a valid 10-digit phone number."
+                        );
+
+                        return;
+                    }
+
+
+                    if (
+                        passwordValue !==
+                        confirmPassword
+                    ) {
+
+                        alert(
+                            "Passwords do not match."
+                        );
+
+                        return;
+                    }
+
+
+                    /*
+                       Temporary frontend registration.
+
+                       Later this form will be connected
+                       to PHP + MySQL.
+                    */
+
+                    alert(
+                        "Registration successful!"
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                }
+            );
+
+    </script>
+
+</body>
+</html>

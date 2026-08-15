@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Complaint Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #2563eb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 15px;
+            background: #2563eb;
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .demo {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .demo strong {
+            color: #0f172a;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <div class="icon">📋</div>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Complaint Management System
+        </p>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="role">Login As</label>
+
+                <select id="role" required>
+                    <option value="">Select Login Type</option>
+                    <option value="user">User</option>
+                    <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+            <div id="errorMessage" class="error"></div>
+
+        </form>
+
+        <div class="demo">
+            <strong>Demo Accounts</strong><br>
+            User: user@gmail.com / user123<br>
+            Staff: staff@gmail.com / staff123<br>
+            Admin: admin@gmail.com / admin123
+        </div>
+
+    </div>
+
+
+    <script>
+
+        document
+            .getElementById("loginForm")
+            .addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                const email =
+                    document.getElementById("email").value.trim();
+
+                const password =
+                    document.getElementById("password").value.trim();
+
+                const role =
+                    document.getElementById("role").value;
+
+                const errorMessage =
+                    document.getElementById("errorMessage");
+
+
+                errorMessage.style.display = "none";
+
+
+                /*
+                    USER LOGIN
+                */
+
+                if (
+                    role === "user" &&
+                    email === "user@gmail.com" &&
+                    password === "user123"
+                ) {
+
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("userRole", "user");
+                    localStorage.setItem("userEmail", email);
+
+                    window.location.href = "./user-dashboard.html";
+
+                    return;
+                }
+
+
+                /*
+                    STAFF LOGIN
+                */
+
+                if (
+                    role === "staff" &&
+                    email === "staff@gmail.com" &&
+                    password === "staff123"
+                ) {
+
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("userRole", "staff");
+                    localStorage.setItem("userEmail", email);
+
+                    window.location.href = "./staff-dashboard.html";
+
+                    return;
+                }
+
+
+                /*
+                    ADMIN LOGIN
+                */
+
+                if (
+                    role === "admin" &&
+                    email === "admin@gmail.com" &&
+                    password === "admin123"
+                ) {
+
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("userRole", "admin");
+                    localStorage.setItem("userEmail", email);
+
+                    window.location.href = "./admin-dashboard.html";
+
+                    return;
+                }
+
+
+                /*
+                    INVALID LOGIN
+                */
+
+                errorMessage.textContent =
+                    "Invalid email, password, or login type.";
+
+                errorMessage.style.display = "block";
+
+            });
+
+    </script>
+
+</body>
+</html>

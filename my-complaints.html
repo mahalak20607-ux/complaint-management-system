@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints | ComplainTrack</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background: #f6f8fc;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .dashboard-layout {
+            display: flex;
+            min-height: calc(100vh - 81px);
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 245px;
+            background: #151b2a;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 10px;
+            color: #7f899b;
+            letter-spacing: 1.2px;
+            margin: 20px 12px 10px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 12px 14px;
+            margin-bottom: 5px;
+
+            border-radius: 8px;
+
+            color: #aeb6c5;
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #3157d5;
+            color: white;
+        }
+
+        .sidebar-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-link {
+            margin-top: 25px;
+            border-top: 1px solid #2a3242;
+            padding-top: 20px;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .dashboard-main {
+            flex: 1;
+            padding: 35px;
+            overflow-x: hidden;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #7b8494;
+            font-size: 13px;
+        }
+
+        .new-complaint-btn {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background: #3157d5;
+            color: white;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .new-complaint-btn:hover {
+            background: #2445b5;
+        }
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+
+            border: 1px solid #e8ebf1;
+            border-radius: 11px;
+
+            padding: 18px 20px;
+        }
+
+        .summary-card span {
+            color: #7d8695;
+            font-size: 11px;
+        }
+
+        .summary-card h2 {
+            font-size: 24px;
+            margin-top: 8px;
+        }
+
+        /* =========================
+           TABLE CARD
+        ========================= */
+
+        .table-card {
+            background: white;
+
+            border: 1px solid #e8ebf1;
+            border-radius: 14px;
+
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 22px 24px;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .table-header h3 {
+            font-size: 16px;
+        }
+
+        /* =========================
+           FILTERS
+        ========================= */
+
+        .filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filters select,
+        .search-box {
+            padding: 9px 12px;
+
+            border: 1px solid #dfe3eb;
+            border-radius: 7px;
+
+            outline: none;
+
+            font-family: inherit;
+            font-size: 11px;
+
+            background: white;
+        }
+
+        .search-box {
+            width: 190px;
+        }
+
+        .filters select:focus,
+        .search-box:focus {
+            border-color: #3157d5;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .complaint-table {
+            width: 100%;
+            min-width: 850px;
+
+            border-collapse: collapse;
+        }
+
+        .complaint-table th {
+            text-align: left;
+
+            padding: 13px 20px;
+
+            color: #8b93a1;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            background: #fafbfc;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .complaint-table td {
+            padding: 17px 20px;
+
+            font-size: 11px;
+
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .complaint-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .complaint-id {
+            color: #3157d5;
+            font-weight: 600;
+        }
+
+        .subject {
+            font-weight: 600;
+            color: #303847;
+        }
+
+        .category {
+            color: #697384;
+        }
+
+        .date {
+            color: #7e8796;
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+            font-weight: 600;
+        }
+
+        .pending {
+            background: #fff4df;
+            color: #b87500;
+        }
+
+        .progress {
+            background: #e8efff;
+            color: #3157d5;
+        }
+
+        .resolved {
+            background: #e5f8ee;
+            color: #16834b;
+        }
+
+        /* =========================
+           PRIORITY
+        ========================= */
+
+        .priority {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .priority.low {
+            color: #16834b;
+        }
+
+        .priority.medium {
+            color: #b87500;
+        }
+
+        .priority.high {
+            color: #d63b3b;
+        }
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
+
+        .view-btn {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            background: #f1f4ff;
+
+            color: #3157d5;
+
+            border-radius: 6px;
+
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .view-btn:hover {
+            background: #3157d5;
+            color: white;
+        }
+
+        /* =========================
+           EMPTY MESSAGE
+        ========================= */
+
+        .no-results {
+            display: none;
+
+            text-align: center;
+
+            padding: 45px;
+
+            color: #8992a0;
+
+            font-size: 13px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .table-header {
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }
+
+            .filters {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .sidebar-title,
+            .sidebar-link span:not(.sidebar-icon) {
+                display: none;
+            }
+
+            .sidebar-link {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .dashboard-main {
+                padding: 22px 15px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .new-complaint-btn {
+                white-space: nowrap;
+                font-size: 11px;
+                padding: 10px 13px;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filters select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                C
+            </div>
+
+            <div>
+                <h2>ComplainTrack</h2>
+                <span>Complaint Management System</span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="user-dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="login.html">
+                Logout
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         LAYOUT
+    ========================= -->
+
+    <div class="dashboard-layout">
+
+
+        <!-- =========================
+             SIDEBAR
+        ========================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                MAIN MENU
+            </div>
+
+
+            <a
+                href="user-dashboard.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="submit-complaint.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ＋
+                </span>
+
+                <span>
+                    New Complaint
+                </span>
+
+            </a>
+
+
+            <a
+                href="my-complaints.html"
+                class="sidebar-link active"
+            >
+
+                <span class="sidebar-icon">
+                    ▤
+                </span>
+
+                <span>
+                    My Complaints
+                </span>
+
+            </a>
+
+
+            <a
+                href="complaint-details.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ◉
+                </span>
+
+                <span>
+                    Track Complaint
+                </span>
+
+            </a>
+
+
+            <div class="sidebar-title">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+            <a
+                href="login.html"
+                class="sidebar-link logout-link"
+            >
+
+                <span class="sidebar-icon">
+                    ↪
+                </span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+        </aside>
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================= -->
+
+        <main class="dashboard-main">
+
+
+            <!-- HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        My Complaints
+                    </h1>
+
+                    <p>
+                        View and track all your submitted complaints.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="submit-complaint.html"
+                    class="new-complaint-btn"
+                >
+                    + New Complaint
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 SUMMARY
+            ========================= -->
+
+            <div class="summary-grid">
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Total Complaints
+                    </span>
+
+                    <h2 id="totalCount">
+                        6
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Pending
+                    </span>
+
+                    <h2 id="pendingCount">
+                        2
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        In Progress
+                    </span>
+
+                    <h2 id="progressCount">
+                        2
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Resolved
+                    </span>
+
+                    <h2 id="resolvedCount">
+                        2
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 TABLE
+            ========================= -->
+
+            <section class="table-card">
+
+
+                <div class="table-header">
+
+                    <h3>
+                        Complaint History
+                    </h3>
+
+
+                    <div class="filters">
+
+
+                        <input
+                            type="search"
+                            id="searchInput"
+                            class="search-box"
+                            placeholder="Search complaints..."
+                            aria-label="Search complaints"
+                        >
+
+
+                        <select
+                            id="statusFilter"
+                            title="Filter complaints by status"
+                            aria-label="Filter complaints by status"
+                        >
+
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="pending">
+                                Pending
+                            </option>
+
+                            <option value="progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="complaint-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    COMPLAINT ID
+                                </th>
+
+                                <th>
+                                    SUBJECT
+                                </th>
+
+                                <th>
+                                    CATEGORY
+                                </th>
+
+                                <th>
+                                    DATE
+                                </th>
+
+                                <th>
+                                    PRIORITY
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="complaintTableBody">
+
+
+                            <!-- COMPLAINT 1 -->
+
+                            <tr
+                                data-status="resolved"
+                                data-search="internet connection technical"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00125
+                                </td>
+
+                                <td class="subject">
+                                    Internet Connection Issue
+                                </td>
+
+                                <td class="category">
+                                    Technical Support
+                                </td>
+
+                                <td class="date">
+                                    15 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge resolved">
+                                        Resolved
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00125"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- COMPLAINT 2 -->
+
+                            <tr
+                                data-status="progress"
+                                data-search="classroom fan facilities maintenance"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00124
+                                </td>
+
+                                <td class="subject">
+                                    Classroom Fan Not Working
+                                </td>
+
+                                <td class="category">
+                                    Facilities
+                                </td>
+
+                                <td class="date">
+                                    13 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge progress">
+                                        In Progress
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00124"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- COMPLAINT 3 -->
+
+                            <tr
+                                data-status="pending"
+                                data-search="assignment academic services"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00120
+                                </td>
+
+                                <td class="subject">
+                                    Assignment Submission Issue
+                                </td>
+
+                                <td class="category">
+                                    Academic Services
+                                </td>
+
+                                <td class="date">
+                                    10 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority low">
+                                        Low
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge pending">
+                                        Pending
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00120"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- COMPLAINT 4 -->
+
+                            <tr
+                                data-status="resolved"
+                                data-search="id card administration"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00118
+                                </td>
+
+                                <td class="subject">
+                                    Student ID Card Issue
+                                </td>
+
+                                <td class="category">
+                                    Administration
+                                </td>
+
+                                <td class="date">
+                                    08 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge resolved">
+                                        Resolved
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00118"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- COMPLAINT 5 -->
+
+                            <tr
+                                data-status="progress"
+                                data-search="bus transport delay"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00115
+                                </td>
+
+                                <td class="subject">
+                                    Transport Delay
+                                </td>
+
+                                <td class="category">
+                                    Transport
+                                </td>
+
+                                <td class="date">
+                                    05 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge progress">
+                                        In Progress
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00115"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- COMPLAINT 6 -->
+
+                            <tr
+                                data-status="pending"
+                                data-search="library administration"
+                            >
+
+                                <td class="complaint-id">
+                                    CMP-2026-00110
+                                </td>
+
+                                <td class="subject">
+                                    Library Facility Issue
+                                </td>
+
+                                <td class="category">
+                                    Administration
+                                </td>
+
+                                <td class="date">
+                                    02 Aug 2026
+                                </td>
+
+                                <td>
+                                    <span class="priority low">
+                                        Low
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="status-badge pending">
+                                        Pending
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="complaint-details.html?id=CMP-2026-00110"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+
+                    <div
+                        class="no-results"
+                        id="noResults"
+                    >
+                        No complaints found.
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const statusFilter =
+            document.getElementById("statusFilter");
+
+        const rows =
+            document.querySelectorAll(
+                "#complaintTableBody tr"
+            );
+
+        const noResults =
+            document.getElementById("noResults");
+
+
+        function filterComplaints() {
+
+            const searchValue =
+                searchInput.value
+                    .toLowerCase()
+                    .trim();
+
+            const statusValue =
+                statusFilter.value;
+
+            let visibleRows = 0;
+
+
+            rows.forEach(function(row) {
+
+                const rowStatus =
+                    row.dataset.status;
+
+                const rowSearch =
+                    row.dataset.search
+                        .toLowerCase();
+
+
+                const matchesSearch =
+                    rowSearch.includes(
+                        searchValue
+                    );
+
+
+                const matchesStatus =
+                    statusValue === "all" ||
+                    rowStatus === statusValue;
+
+
+                if (
+                    matchesSearch &&
+                    matchesStatus
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            if (visibleRows === 0) {
+
+                noResults.style.display =
+                    "block";
+
+            } else {
+
+                noResults.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        searchInput.addEventListener(
+            "input",
+            filterComplaints
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterComplaints
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Complaint Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 250px;
+            height: 100vh;
+            background: #1e3a8a;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+        }
+
+        .logout {
+            background: #dc2626 !important;
+            margin-top: 25px;
+        }
+
+        .main {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .header h1 {
+            color: #1e3a8a;
+            margin-bottom: 7px;
+        }
+
+        .profile-container {
+            max-width: 850px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .profile-top {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .profile-top h2 {
+            color: #1e3a8a;
+            margin-bottom: 5px;
+        }
+
+        .profile-top p {
+            color: #777;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save {
+            background: #2563eb;
+            color: white;
+        }
+
+        .reset {
+            background: #6b7280;
+            color: white;
+        }
+
+        .message {
+            display: none;
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .profile-top {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h2>Complaint System</h2>
+
+    <a href="user-dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="submit-complaint.html">
+        Submit Complaint
+    </a>
+
+    <a href="my-complaints.html">
+        My Complaints
+    </a>
+
+    <a href="profile.html" class="active">
+        My Profile
+    </a>
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="login.html" class="logout">
+        Logout
+    </a>
+
+</div>
+
+
+<div class="main">
+
+    <div class="header">
+        <h1>My Profile</h1>
+        <p>View and update your personal information.</p>
+    </div>
+
+
+    <div class="profile-container">
+
+        <div class="profile-top">
+
+            <div class="avatar" id="avatar">
+                U
+            </div>
+
+            <div>
+                <h2 id="profileName">User Name</h2>
+                <p>Registered Citizen</p>
+            </div>
+
+        </div>
+
+
+        <div id="message" class="message">
+            Profile updated successfully!
+        </div>
+
+
+        <form id="profileForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        value="Mahalakshmi"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        value="user@gmail.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        value="9876543210"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        value="Chennai"
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label for="address">
+                        Address
+                    </label>
+
+                    <textarea id="address">Chennai, Tamil Nadu</textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="btn save"
+                >
+                    Save Changes
+                </button>
+
+                <button
+                    type="reset"
+                    class="btn reset"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const nameInput =
+    document.getElementById("name");
+
+const profileName =
+    document.getElementById("profileName");
+
+const avatar =
+    document.getElementById("avatar");
+
+
+function updateProfileDisplay() {
+
+    const name =
+        nameInput.value.trim();
+
+    profileName.innerText =
+        name || "User Name";
+
+    avatar.innerText =
+        name
+        ? name.charAt(0).toUpperCase()
+        : "U";
+}
+
+
+document
+.getElementById("profileForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const profile = {
+
+        name: document.getElementById("name").value,
+
+        email: document.getElementById("email").value,
+
+        phone: document.getElementById("phone").value,
+
+        city: document.getElementById("city").value,
+
+        address: document.getElementById("address").value
+
+    };
+
+
+    localStorage.setItem(
+        "userProfile",
+        JSON.stringify(profile)
+    );
+
+
+    updateProfileDisplay();
+
+
+    const message =
+        document.getElementById("message");
+
+    message.style.display = "block";
+
+
+    setTimeout(function() {
+
+        message.style.display = "none";
+
+    }, 3000);
+
+});
+
+
+const savedProfile =
+    localStorage.getItem("userProfile");
+
+
+if (savedProfile) {
+
+    const profile =
+        JSON.parse(savedProfile);
+
+    document.getElementById("name").value =
+        profile.name || "";
+
+    document.getElementById("email").value =
+        profile.email || "";
+
+    document.getElementById("phone").value =
+        profile.phone || "";
+
+    document.getElementById("city").value =
+        profile.city || "";
+
+    document.getElementById("address").value =
+        profile.address || "";
+
+}
+
+
+updateProfileDisplay();
+
+</script>
+
+</body>
+</html>

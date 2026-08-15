@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Complaint Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 18px;
+
+            background: #2563eb;
+            color: white;
+
+            border-radius: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f172a;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #334155;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+
+            font-size: 15px;
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            display: none;
+
+            margin-top: 15px;
+            padding: 12px;
+
+            background: #fee2e2;
+            color: #b91c1c;
+
+            border-radius: 8px;
+
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .demo-account {
+            margin-top: 25px;
+            padding: 15px;
+
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+            line-height: 1.7;
+            color: #475569;
+        }
+
+        .demo-account strong {
+            color: #0f172a;
+        }
+
+        .back-login {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+        .back-login a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-login a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+
+            .login-card {
+                padding: 28px 22px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <div class="admin-icon">
+                🛡️
+            </div>
+
+            <h1>Admin Login</h1>
+
+            <p class="subtitle">
+                Complaint Management System
+            </p>
+
+            <form id="adminLoginForm">
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Admin Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter admin email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    Login as Admin
+                </button>
+
+
+                <div
+                    id="errorMessage"
+                    class="error-message"
+                ></div>
+
+            </form>
+
+
+            <div class="demo-account">
+
+                <strong>Demo Admin Account</strong>
+
+                <br>
+
+                Email:
+                admin@gmail.com
+
+                <br>
+
+                Password:
+                admin123
+
+            </div>
+
+
+            <div class="back-login">
+
+                <a href="login.html">
+                    ← Back to Main Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        document
+            .getElementById("adminLoginForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value
+                        .trim();
+
+
+                const errorMessage =
+                    document.getElementById("errorMessage");
+
+
+                errorMessage.style.display = "none";
+
+
+                /*
+                 * ADMIN LOGIN
+                 */
+
+                if (
+                    email === "admin@gmail.com" &&
+                    password === "admin123"
+                ) {
+
+                    localStorage.setItem(
+                        "loggedIn",
+                        "true"
+                    );
+
+                    localStorage.setItem(
+                        "userRole",
+                        "admin"
+                    );
+
+                    localStorage.setItem(
+                        "userEmail",
+                        email
+                    );
+
+
+                    window.location.href =
+                        "admin-dashboard.html";
+
+                    return;
+                }
+
+
+                /*
+                 * INVALID LOGIN
+                 */
+
+                errorMessage.textContent =
+                    "Invalid admin email or password.";
+
+                errorMessage.style.display = "block";
+
+            });
+
+    </script>
+
+</body>
+</html>

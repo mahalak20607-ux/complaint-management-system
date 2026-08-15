@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | ComplainTrack</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background: #f6f8fc;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .dashboard-layout {
+            display: flex;
+            min-height: calc(100vh - 81px);
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 245px;
+            background: #151b2a;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 10px;
+            color: #7f899b;
+            letter-spacing: 1.2px;
+            margin: 20px 12px 10px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 12px 14px;
+            margin-bottom: 5px;
+
+            border-radius: 8px;
+
+            color: #aeb6c5;
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #3157d5;
+            color: white;
+        }
+
+        .sidebar-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-link {
+            margin-top: 25px;
+            border-top: 1px solid #2a3242;
+            padding-top: 20px;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .dashboard-main {
+            flex: 1;
+            padding: 35px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #7b8494;
+            font-size: 13px;
+        }
+
+        /* =========================
+           FORM CARD
+        ========================= */
+
+        .complaint-form-card {
+            max-width: 950px;
+            background: white;
+            border: 1px solid #e8ebf1;
+            border-radius: 14px;
+            padding: 32px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 22px;
+            padding-bottom: 15px;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .section-number {
+            width: 30px;
+            height: 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: #eef2ff;
+            color: #3157d5;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-section-title h3 {
+            font-size: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333b4d;
+        }
+
+        .required {
+            color: #d63b3b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+
+            border: 1px solid #dfe3eb;
+            border-radius: 8px;
+
+            padding: 13px 14px;
+
+            outline: none;
+
+            font-family: inherit;
+            font-size: 13px;
+
+            color: #252c3b;
+            background: white;
+
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3157d5;
+
+            box-shadow:
+                0 0 0 3px rgba(49, 87, 213, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .helper-text {
+            color: #8a92a0;
+            font-size: 10px;
+        }
+
+        /* =========================
+           PRIORITY
+        ========================= */
+
+        .priority-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .priority-option {
+            position: relative;
+        }
+
+        .priority-option input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .priority-label {
+            display: block;
+
+            padding: 15px;
+
+            border: 1px solid #dfe3eb;
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .priority-label strong {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .priority-label span {
+            font-size: 10px;
+            color: #8992a0;
+        }
+
+        .priority-option input:checked + .priority-label {
+            border-color: #3157d5;
+            background: #f3f5ff;
+        }
+
+        /* =========================
+           FILE UPLOAD
+        ========================= */
+
+        .file-upload {
+            display: block;
+
+            border: 1.5px dashed #cfd5e0;
+            border-radius: 10px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #3157d5;
+            background: #fafbff;
+        }
+
+        .upload-icon {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .file-upload strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .file-upload span {
+            display: block;
+
+            color: #8992a0;
+            font-size: 10px;
+
+            margin-top: 4px;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        #fileName {
+            margin-top: 10px;
+
+            color: #3157d5;
+
+            font-size: 11px;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+
+            gap: 12px;
+
+            padding-top: 25px;
+
+            border-top: 1px solid #edf0f4;
+        }
+
+        .cancel-btn,
+        .submit-btn {
+            padding: 12px 23px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: white;
+            color: #5f6878;
+
+            border: 1px solid #dfe3eb;
+        }
+
+        .submit-btn {
+            background: #3157d5;
+            color: white;
+
+            border: none;
+        }
+
+        .submit-btn:hover {
+            background: #2445b5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 65px;
+                padding: 20px 8px;
+            }
+
+            .sidebar-title,
+            .sidebar-link span:not(.sidebar-icon) {
+                display: none;
+            }
+
+            .sidebar-link {
+                justify-content: center;
+                padding: 13px 5px;
+            }
+
+            .dashboard-main {
+                padding: 22px 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .complaint-form-card {
+                padding: 22px 18px;
+            }
+
+            .priority-options {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .cancel-btn,
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                C
+            </div>
+
+            <div>
+                <h2>ComplainTrack</h2>
+                <span>Complaint Management System</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="user-dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="login.html">
+                Logout
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         DASHBOARD LAYOUT
+    ========================= -->
+
+    <div class="dashboard-layout">
+
+
+        <!-- =========================
+             SIDEBAR
+        ========================= -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                MAIN MENU
+            </div>
+
+
+            <a
+                href="user-dashboard.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="submit-complaint.html"
+                class="sidebar-link active"
+            >
+
+                <span class="sidebar-icon">
+                    ＋
+                </span>
+
+                <span>
+                    New Complaint
+                </span>
+
+            </a>
+
+
+            <a
+                href="my-complaints.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ▤
+                </span>
+
+                <span>
+                    My Complaints
+                </span>
+
+            </a>
+
+
+            <a
+                href="complaint-details.html"
+                class="sidebar-link"
+            >
+
+                <span class="sidebar-icon">
+                    ◉
+                </span>
+
+                <span>
+                    Track Complaint
+                </span>
+
+            </a>
+
+
+            <div class="sidebar-title">
+                ACCOUNT
+            </div>
+
+
+            <a href="profile.html" class="sidebar-link">
+
+                <span class="sidebar-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+
+                <span class="sidebar-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+            <a
+                href="login.html"
+                class="sidebar-link logout-link"
+            >
+
+                <span class="sidebar-icon">
+                    ↪
+                </span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+        </aside>
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================= -->
+
+        <main class="dashboard-main">
+
+
+            <div class="page-header">
+
+                <h1>
+                    Submit a Complaint
+                </h1>
+
+                <p>
+                    Provide the details below to submit your complaint.
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 FORM CARD
+            ========================= -->
+
+            <div class="complaint-form-card">
+
+                <form id="complaintForm">
+
+
+                    <!-- SECTION 01 -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+
+                            <div class="section-number">
+                                01
+                            </div>
+
+                            <h3>
+                                Complaint Information
+                            </h3>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+
+                            <!-- CATEGORY -->
+
+                            <div class="form-group">
+
+                                <label for="category">
+
+                                    Complaint Category
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    id="category"
+                                    name="category"
+                                    title="Select complaint category"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select category
+                                    </option>
+
+                                    <option value="Technical Support">
+                                        Technical Support
+                                    </option>
+
+                                    <option value="Academic Services">
+                                        Academic Services
+                                    </option>
+
+                                    <option value="Administration">
+                                        Administration
+                                    </option>
+
+                                    <option value="Facilities">
+                                        Facilities & Maintenance
+                                    </option>
+
+                                    <option value="Transport">
+                                        Transport
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- DEPARTMENT -->
+
+                            <div class="form-group">
+
+                                <label for="department">
+
+                                    Department
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <select
+                                    id="department"
+                                    name="department"
+                                    title="Select department"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select department
+                                    </option>
+
+                                    <option value="IT Department">
+                                        IT Department
+                                    </option>
+
+                                    <option value="Academic Department">
+                                        Academic Department
+                                    </option>
+
+                                    <option value="Administration">
+                                        Administration
+                                    </option>
+
+                                    <option value="Maintenance">
+                                        Maintenance
+                                    </option>
+
+                                    <option value="Transport Department">
+                                        Transport Department
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- SUBJECT -->
+
+                            <div class="form-group full">
+
+                                <label for="subject">
+
+                                    Complaint Subject
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="subject"
+                                    name="subject"
+                                    placeholder="Enter a short subject for your complaint"
+                                    maxlength="100"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- DESCRIPTION -->
+
+                            <div class="form-group full">
+
+                                <label for="description">
+
+                                    Complaint Description
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    placeholder="Describe your complaint clearly and provide all relevant details..."
+                                    maxlength="1000"
+                                    required
+                                ></textarea>
+
+
+                                <span class="helper-text">
+
+                                    Please provide enough information to help us understand and resolve your complaint.
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SECTION 02 -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+
+                            <div class="section-number">
+                                02
+                            </div>
+
+                            <h3>
+                                Priority Level
+                            </h3>
+
+                        </div>
+
+
+                        <div class="priority-options">
+
+
+                            <!-- LOW -->
+
+                            <div class="priority-option">
+
+                                <input
+                                    type="radio"
+                                    name="priority"
+                                    id="low"
+                                    value="Low"
+                                    required
+                                >
+
+
+                                <label
+                                    for="low"
+                                    class="priority-label"
+                                >
+
+                                    <strong>
+                                        Low Priority
+                                    </strong>
+
+                                    <span>
+                                        General issue
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- MEDIUM -->
+
+                            <div class="priority-option">
+
+                                <input
+                                    type="radio"
+                                    name="priority"
+                                    id="medium"
+                                    value="Medium"
+                                >
+
+
+                                <label
+                                    for="medium"
+                                    class="priority-label"
+                                >
+
+                                    <strong>
+                                        Medium Priority
+                                    </strong>
+
+                                    <span>
+                                        Requires attention
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- HIGH -->
+
+                            <div class="priority-option">
+
+                                <input
+                                    type="radio"
+                                    name="priority"
+                                    id="high"
+                                    value="High"
+                                >
+
+
+                                <label
+                                    for="high"
+                                    class="priority-label"
+                                >
+
+                                    <strong>
+                                        High Priority
+                                    </strong>
+
+                                    <span>
+                                        Urgent issue
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SECTION 03 -->
+
+                    <div class="form-section">
+
+                        <div class="form-section-title">
+
+                            <div class="section-number">
+                                03
+                            </div>
+
+                            <h3>
+                                Supporting Document
+                            </h3>
+
+                        </div>
+
+
+                        <label
+                            for="attachment"
+                            class="file-upload"
+                        >
+
+                            <div class="upload-icon">
+                                ⬆
+                            </div>
+
+
+                            <strong>
+                                Click to upload a file
+                            </strong>
+
+
+                            <span>
+                                PNG, JPG, PDF — Maximum 5 MB
+                            </span>
+
+
+                            <input
+                                type="file"
+                                id="attachment"
+                                name="attachment"
+                                title="Upload supporting document"
+                                accept=".png,.jpg,.jpeg,.pdf"
+                            >
+
+
+                            <div id="fileName"></div>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- =========================
+                         BUTTONS
+                    ========================= -->
+
+                    <div class="form-actions">
+
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            id="cancelBtn"
+                        >
+                            Cancel
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="submit-btn"
+                        >
+                            Submit Complaint →
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* =========================
+           FILE UPLOAD
+        ========================= */
+
+        const attachment =
+            document.getElementById("attachment");
+
+        const fileName =
+            document.getElementById("fileName");
+
+
+        attachment.addEventListener(
+            "change",
+            function () {
+
+                if (attachment.files.length === 0) {
+
+                    fileName.textContent = "";
+
+                    return;
+                }
+
+
+                const file =
+                    attachment.files[0];
+
+
+                const fileSize =
+                    file.size / (1024 * 1024);
+
+
+                if (fileSize > 5) {
+
+                    alert(
+                        "File size must be less than 5 MB."
+                    );
+
+                    attachment.value = "";
+
+                    fileName.textContent = "";
+
+                    return;
+                }
+
+
+                fileName.textContent =
+                    "Selected: " + file.name;
+
+            }
+        );
+
+
+        /* =========================
+           CANCEL BUTTON
+        ========================= */
+
+        document
+            .getElementById("cancelBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    window.location.href =
+                        "user-dashboard.html";
+
+                }
+            );
+
+
+        /* =========================
+           FORM SUBMISSION
+        ========================= */
+
+        document
+            .getElementById("complaintForm")
+            .addEventListener(
+                "submit",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    const category =
+                        document.getElementById(
+                            "category"
+                        ).value;
+
+
+                    const department =
+                        document.getElementById(
+                            "department"
+                        ).value;
+
+
+                    const subject =
+                        document.getElementById(
+                            "subject"
+                        ).value.trim();
+
+
+                    const description =
+                        document.getElementById(
+                            "description"
+                        ).value.trim();
+
+
+                    const priority =
+                        document.querySelector(
+                            'input[name="priority"]:checked'
+                        );
+
+
+                    /* VALIDATION */
+
+                    if (
+                        category === "" ||
+                        department === "" ||
+                        subject === "" ||
+                        description === "" ||
+                        !priority
+                    ) {
+
+                        alert(
+                            "Please complete all required fields."
+                        );
+
+                        return;
+                    }
+
+
+                    /* GENERATE COMPLAINT ID */
+
+                    const complaintId =
+                        "CMP-" +
+                        new Date().getFullYear() +
+                        "-" +
+                        Math.floor(
+                            10000 +
+                            Math.random() * 90000
+                        );
+
+
+                    /* SUCCESS */
+
+                    alert(
+                        "Complaint submitted successfully!\n\n" +
+                        "Complaint ID: " +
+                        complaintId
+                    );
+
+
+                    window.location.href =
+                        "my-complaints.html";
+
+                }
+            );
+
+    </script>
+
+</body>
+
+</html>

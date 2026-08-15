@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | Complaint Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #1e3a8a;
+            padding: 20px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #2563eb;
+        }
+
+        .sidebar a.active {
+            background: #2563eb;
+        }
+
+        .logout {
+            background: #dc2626;
+            margin-top: 25px !important;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .header h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        /* FILTER */
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-box h2 {
+            margin-bottom: 15px;
+            color: #1e3a8a;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+        }
+
+        /* SUMMARY */
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+
+        /* REPORT */
+        .report-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .report-header h2 {
+            color: #1e3a8a;
+        }
+
+        .print-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .print-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* TABLE */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .high {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .medium {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .low {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        /* PRINT */
+        @media print {
+
+            .sidebar,
+            .filter-box,
+            .print-btn {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            body {
+                background: white;
+            }
+
+            .card,
+            .report-box {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>Complaint System</h2>
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="manage-complaints.html">
+            Manage Complaints
+        </a>
+
+        <a href="manage-staff.html">
+            Manage Staff
+        </a>
+
+        <a href="report.html" class="active">
+            Reports
+        </a>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="admin-login.html" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>Complaint Reports</h1>
+
+            <p>
+                View and filter complaint statistics.
+            </p>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-box">
+
+            <h2>Filter Reports</h2>
+
+            <div class="filters">
+
+                <div class="filter-group">
+
+                    <label for="categoryFilter">
+                        Category
+                    </label>
+
+                    <select id="categoryFilter">
+
+                        <option value="All">
+                            All Categories
+                        </option>
+
+                        <option value="Water">
+                            Water
+                        </option>
+
+                        <option value="Road">
+                            Road
+                        </option>
+
+                        <option value="Electricity">
+                            Electricity
+                        </option>
+
+                        <option value="Sanitation">
+                            Sanitation
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label for="statusFilter">
+                        Status
+                    </label>
+
+                    <select id="statusFilter">
+
+                        <option value="All">
+                            All Status
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Resolved">
+                            Resolved
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="filter-group">
+
+                    <label for="priorityFilter">
+                        Priority
+                    </label>
+
+                    <select id="priorityFilter">
+
+                        <option value="All">
+                            All Priority
+                        </option>
+
+                        <option value="High">
+                            High
+                        </option>
+
+                        <option value="Medium">
+                            Medium
+                        </option>
+
+                        <option value="Low">
+                            Low
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary">
+
+            <div class="card">
+
+                <h3>Total Complaints</h3>
+
+                <p id="totalCount">0</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Pending</h3>
+
+                <p id="pendingCount">0</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>In Progress</h3>
+
+                <p id="progressCount">0</p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Resolved</h3>
+
+                <p id="resolvedCount">0</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- REPORT TABLE -->
+
+        <div class="report-box">
+
+            <div class="report-header">
+
+                <h2>Complaint Details</h2>
+
+                <button
+                    type="button"
+                    class="print-btn"
+                    id="printButton">
+                    Print Report
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Complaint ID</th>
+
+                            <th>Category</th>
+
+                            <th>Citizen</th>
+
+                            <th>Status</th>
+
+                            <th>Priority</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reportTable">
+
+                        <tr
+                            data-category="Water"
+                            data-status="Pending"
+                            data-priority="High">
+
+                            <td>CMP001</td>
+
+                            <td>Water</td>
+
+                            <td>Arun Kumar</td>
+
+                            <td>
+                                <span class="status pending">
+                                    Pending
+                                </span>
+                            </td>
+
+                            <td class="high">
+                                High
+                            </td>
+
+                            <td>15 Aug 2026</td>
+
+                        </tr>
+
+
+                        <tr
+                            data-category="Road"
+                            data-status="In Progress"
+                            data-priority="Medium">
+
+                            <td>CMP002</td>
+
+                            <td>Road</td>
+
+                            <td>Priya Sharma</td>
+
+                            <td>
+                                <span class="status progress">
+                                    In Progress
+                                </span>
+                            </td>
+
+                            <td class="medium">
+                                Medium
+                            </td>
+
+                            <td>14 Aug 2026</td>
+
+                        </tr>
+
+
+                        <tr
+                            data-category="Electricity"
+                            data-status="Resolved"
+                            data-priority="Low">
+
+                            <td>CMP003</td>
+
+                            <td>Electricity</td>
+
+                            <td>Rahul Raj</td>
+
+                            <td>
+                                <span class="status resolved">
+                                    Resolved
+                                </span>
+                            </td>
+
+                            <td class="low">
+                                Low
+                            </td>
+
+                            <td>14 Aug 2026</td>
+
+                        </tr>
+
+
+                        <tr
+                            data-category="Water"
+                            data-status="Pending"
+                            data-priority="Medium">
+
+                            <td>CMP004</td>
+
+                            <td>Water</td>
+
+                            <td>Divya</td>
+
+                            <td>
+                                <span class="status pending">
+                                    Pending
+                                </span>
+                            </td>
+
+                            <td class="medium">
+                                Medium
+                            </td>
+
+                            <td>13 Aug 2026</td>
+
+                        </tr>
+
+
+                        <tr
+                            data-category="Road"
+                            data-status="In Progress"
+                            data-priority="High">
+
+                            <td>CMP005</td>
+
+                            <td>Road</td>
+
+                            <td>Sathya</td>
+
+                            <td>
+                                <span class="status progress">
+                                    In Progress
+                                </span>
+                            </td>
+
+                            <td class="high">
+                                High
+                            </td>
+
+                            <td>12 Aug 2026</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+
+                <div
+                    id="noData"
+                    class="no-data">
+
+                    No complaints found.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const categoryFilter =
+            document.getElementById("categoryFilter");
+
+        const statusFilter =
+            document.getElementById("statusFilter");
+
+        const priorityFilter =
+            document.getElementById("priorityFilter");
+
+        const reportTable =
+            document.getElementById("reportTable");
+
+        const totalCount =
+            document.getElementById("totalCount");
+
+        const pendingCount =
+            document.getElementById("pendingCount");
+
+        const progressCount =
+            document.getElementById("progressCount");
+
+        const resolvedCount =
+            document.getElementById("resolvedCount");
+
+        const noData =
+            document.getElementById("noData");
+
+
+        function filterReport() {
+
+            const selectedCategory =
+                categoryFilter.value;
+
+            const selectedStatus =
+                statusFilter.value;
+
+            const selectedPriority =
+                priorityFilter.value;
+
+
+            const rows =
+                reportTable.querySelectorAll("tr");
+
+
+            let total = 0;
+            let pending = 0;
+            let progress = 0;
+            let resolved = 0;
+
+
+            rows.forEach(function(row) {
+
+                const category =
+                    row.getAttribute("data-category");
+
+                const status =
+                    row.getAttribute("data-status");
+
+                const priority =
+                    row.getAttribute("data-priority");
+
+
+                const categoryMatch =
+                    selectedCategory === "All" ||
+                    selectedCategory === category;
+
+
+                const statusMatch =
+                    selectedStatus === "All" ||
+                    selectedStatus === status;
+
+
+                const priorityMatch =
+                    selectedPriority === "All" ||
+                    selectedPriority === priority;
+
+
+                if (
+                    categoryMatch &&
+                    statusMatch &&
+                    priorityMatch
+                ) {
+
+                    row.style.display = "";
+
+                    total++;
+
+
+                    if (status === "Pending") {
+                        pending++;
+                    }
+
+
+                    if (status === "In Progress") {
+                        progress++;
+                    }
+
+
+                    if (status === "Resolved") {
+                        resolved++;
+                    }
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            totalCount.textContent = total;
+
+            pendingCount.textContent = pending;
+
+            progressCount.textContent = progress;
+
+            resolvedCount.textContent = resolved;
+
+
+            if (total === 0) {
+
+                noData.style.display = "block";
+
+            } else {
+
+                noData.style.display = "none";
+
+            }
+
+        }
+
+
+        categoryFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        priorityFilter.addEventListener(
+            "change",
+            filterReport
+        );
+
+
+        document
+            .getElementById("printButton")
+            .addEventListener("click", function() {
+
+                window.print();
+
+            });
+
+
+        /* LOAD REPORT */
+
+        filterReport();
+
+    </script>
+
+</body>
+</html>

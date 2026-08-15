@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Users | Complaint Management System</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 21px;
+        }
+
+        .logo p {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .menu a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 7px;
+        }
+
+        .menu a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .menu a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 20px;
+        }
+
+        .logout button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 7px;
+            background: #dc2626;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .logout button:hover {
+            background: #b91c1c;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .admin-box {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-box span {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-box h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-row input {
+            flex: 1;
+            height: 42px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-row input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .clear-btn {
+            height: 42px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 6px;
+            background: #6b7280;
+            color: white;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            background: #4b5563;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            font-size: 20px;
+        }
+
+        .total {
+            color: #6b7280;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: #f3f4f6;
+            padding: 13px;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .action-btn {
+            border: none;
+            padding: 7px 11px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .view-btn {
+            background: #2563eb;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .action-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            width: 420px;
+            max-width: 90%;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            font-size: 25px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .detail {
+            margin-bottom: 15px;
+        }
+
+        .detail strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .detail p {
+            color: #4b5563;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .header {
+                display: block;
+            }
+
+            .admin-box {
+                margin-top: 15px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <h2>🛡️ CMS Admin</h2>
+
+            <p>
+                Complaint Management System
+            </p>
+
+        </div>
+
+
+        <div class="menu">
+
+            <a href="admin-dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="manage-complaints.html">
+                📋 Manage Complaints
+            </a>
+
+            <a href="manage-users.html"
+               class="active">
+                👥 Manage Users
+            </a>
+
+            <a href="manage-staff.html">
+                👨‍💼 Manage Staff
+            </a>
+
+            <a href="reports.html">
+                📊 Reports
+            </a>
+
+        </div>
+
+
+        <div class="logout">
+
+            <button
+                type="button"
+                onclick="logout()">
+                🚪 Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    Manage Users
+                </h1>
+
+                <p>
+                    View and manage registered users
+                </p>
+
+            </div>
+
+
+            <div class="admin-box">
+
+                Admin:
+                <span id="adminEmail">
+                    admin@gmail.com
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <h2>
+                Search Users
+            </h2>
+
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Search by name, email or phone">
+
+                <button
+                    type="button"
+                    class="clear-btn"
+                    onclick="resetSearch()">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- USER TABLE -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+                <h2>
+                    Registered Users
+                </h2>
+
+                <div class="total">
+
+                    Total:
+                    <strong id="totalCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Date Joined
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="userTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= VIEW MODAL ================= -->
+
+    <div
+        class="modal"
+        id="userModal">
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h2>
+                    User Details
+                </h2>
+
+                <span
+                    class="close-btn"
+                    onclick="closeModal()">
+
+                    &times;
+
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    User ID
+                </strong>
+
+                <p id="modalId"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Name
+                </strong>
+
+                <p id="modalName"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Email
+                </strong>
+
+                <p id="modalEmail"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Phone
+                </strong>
+
+                <p id="modalPhone"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Date Joined
+                </strong>
+
+                <p id="modalDate"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Status
+                </strong>
+
+                <p id="modalStatus"></p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        var users = [
+
+            {
+                id: "USR001",
+                name: "Rahul Kumar",
+                email: "rahul@gmail.com",
+                phone: "9876543210",
+                date: "10-08-2026",
+                status: "Active"
+            },
+
+            {
+                id: "USR002",
+                name: "Priya Sharma",
+                email: "priya@gmail.com",
+                phone: "9876543211",
+                date: "09-08-2026",
+                status: "Active"
+            },
+
+            {
+                id: "USR003",
+                name: "Arun Kumar",
+                email: "arun@gmail.com",
+                phone: "9876543212",
+                date: "08-08-2026",
+                status: "Inactive"
+            },
+
+            {
+                id: "USR004",
+                name: "Divya Raj",
+                email: "divya@gmail.com",
+                phone: "9876543213",
+                date: "07-08-2026",
+                status: "Active"
+            },
+
+            {
+                id: "USR005",
+                name: "Karthik S",
+                email: "karthik@gmail.com",
+                phone: "9876543214",
+                date: "06-08-2026",
+                status: "Active"
+            }
+
+        ];
+
+
+        /* DISPLAY USERS */
+
+        function showUsers(data) {
+
+            var table =
+                document.getElementById(
+                    "userTable"
+                );
+
+            table.innerHTML = "";
+
+
+            document.getElementById(
+                "totalCount"
+            ).textContent = data.length;
+
+
+            if (data.length === 0) {
+
+                table.innerHTML =
+                    "<tr>" +
+                    "<td colspan='7' " +
+                    "style='text-align:center;padding:30px'>" +
+                    "No users found" +
+                    "</td>" +
+                    "</tr>";
+
+                return;
+            }
+
+
+            for (
+                var i = 0;
+                i < data.length;
+                i++
+            ) {
+
+                var user = data[i];
+
+                var statusClass =
+                    user.status === "Active"
+                    ? "active"
+                    : "inactive";
+
+
+                var row =
+                    document.createElement("tr");
+
+
+                row.innerHTML =
+
+                    "<td>#" +
+                    user.id +
+                    "</td>" +
+
+                    "<td>" +
+                    user.name +
+                    "</td>" +
+
+                    "<td>" +
+                    user.email +
+                    "</td>" +
+
+                    "<td>" +
+                    user.phone +
+                    "</td>" +
+
+                    "<td>" +
+                    user.date +
+                    "</td>" +
+
+                    "<td>" +
+
+                    "<span class='status " +
+                    statusClass +
+                    "'>" +
+
+                    user.status +
+
+                    "</span>" +
+
+                    "</td>" +
+
+                    "<td>" +
+
+                    "<button " +
+                    "type='button' " +
+                    "class='action-btn view-btn' " +
+                    "onclick=\"viewUser('" +
+                    user.id +
+                    "')\">" +
+
+                    "View" +
+
+                    "</button>" +
+
+                    "<button " +
+                    "type='button' " +
+                    "class='action-btn delete-btn' " +
+                    "onclick=\"deleteUser('" +
+                    user.id +
+                    "')\">" +
+
+                    "Delete" +
+
+                    "</button>" +
+
+                    "</td>";
+
+
+                table.appendChild(row);
+
+            }
+
+        }
+
+
+        /* SEARCH */
+
+        function searchUsers() {
+
+            var search =
+                document.getElementById(
+                    "search"
+                ).value.toLowerCase();
+
+
+            var result = [];
+
+
+            for (
+                var i = 0;
+                i < users.length;
+                i++
+            ) {
+
+                var user = users[i];
+
+
+                var match =
+
+                    user.id
+                    .toLowerCase()
+                    .indexOf(search) !== -1
+
+                    ||
+
+                    user.name
+                    .toLowerCase()
+                    .indexOf(search) !== -1
+
+                    ||
+
+                    user.email
+                    .toLowerCase()
+                    .indexOf(search) !== -1
+
+                    ||
+
+                    user.phone
+                    .indexOf(search) !== -1;
+
+
+                if (match) {
+
+                    result.push(user);
+
+                }
+
+            }
+
+
+            showUsers(result);
+
+        }
+
+
+        /* SEARCH EVENT */
+
+        document.getElementById(
+            "search"
+        ).addEventListener(
+            "input",
+            searchUsers
+        );
+
+
+        /* RESET */
+
+        function resetSearch() {
+
+            document.getElementById(
+                "search"
+            ).value = "";
+
+            showUsers(users);
+
+        }
+
+
+        /* VIEW USER */
+
+        function viewUser(id) {
+
+            var user = null;
+
+
+            for (
+                var i = 0;
+                i < users.length;
+                i++
+            ) {
+
+                if (
+                    users[i].id === id
+                ) {
+
+                    user = users[i];
+
+                    break;
+
+                }
+
+            }
+
+
+            if (user) {
+
+                document.getElementById(
+                    "modalId"
+                ).textContent =
+                    "#" + user.id;
+
+
+                document.getElementById(
+                    "modalName"
+                ).textContent =
+                    user.name;
+
+
+                document.getElementById(
+                    "modalEmail"
+                ).textContent =
+                    user.email;
+
+
+                document.getElementById(
+                    "modalPhone"
+                ).textContent =
+                    user.phone;
+
+
+                document.getElementById(
+                    "modalDate"
+                ).textContent =
+                    user.date;
+
+
+                document.getElementById(
+                    "modalStatus"
+                ).textContent =
+                    user.status;
+
+
+                document.getElementById(
+                    "userModal"
+                ).style.display =
+                    "flex";
+
+            }
+
+        }
+
+
+        /* CLOSE MODAL */
+
+        function closeModal() {
+
+            document.getElementById(
+                "userModal"
+            ).style.display =
+                "none";
+
+        }
+
+
+        /* DELETE USER */
+
+        function deleteUser(id) {
+
+            var answer =
+                confirm(
+                    "Are you sure you want to delete user #" +
+                    id +
+                    "?"
+                );
+
+
+            if (!answer) {
+
+                return;
+
+            }
+
+
+            var newUsers = [];
+
+
+            for (
+                var i = 0;
+                i < users.length;
+                i++
+            ) {
+
+                if (
+                    users[i].id !== id
+                ) {
+
+                    newUsers.push(
+                        users[i]
+                    );
+
+                }
+
+            }
+
+
+            users = newUsers;
+
+            searchUsers();
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* INITIAL DISPLAY */
+
+        showUsers(users);
+
+    </script>
+
+</body>
+
+</html>

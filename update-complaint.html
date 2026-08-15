@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Update Complaint Details</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #1e3a8a;
+            padding: 20px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 21px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin: 7px 0;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+        }
+
+        .logout {
+            background: #dc2626;
+            margin-top: 25px !important;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header h1 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #666;
+        }
+
+        /* FORM CONTAINER */
+        .form-container {
+            max-width: 950px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-container h2 {
+            color: #1e3a8a;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .full-width {
+            grid-column: 1 / 3;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input[readonly] {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+        /* BUTTONS */
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .update-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .update-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background: #4b5563;
+        }
+
+        /* MESSAGE */
+        .message {
+            display: none;
+            padding: 13px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* COMPLAINT INFO */
+        .complaint-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 7px;
+        }
+
+        .info-box span {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-box strong {
+            color: #1e3a8a;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: 1;
+            }
+
+            .complaint-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>Complaint System</h2>
+
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="manage-complaints.html" class="active">
+            Manage Complaints
+        </a>
+
+        <a href="manage-staff.html">
+            Manage Staff
+        </a>
+
+        <a href="report.html">
+            Reports
+        </a>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="admin-login.html" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <div class="page-header">
+
+            <h1>Update Complaint Details</h1>
+
+            <p>
+                Update the complaint status, priority and assigned staff.
+            </p>
+
+        </div>
+
+
+        <div class="form-container">
+
+            <h2>Complaint Information</h2>
+
+
+            <!-- COMPLAINT INFORMATION -->
+
+            <div class="complaint-info">
+
+                <div class="info-box">
+
+                    <span>Complaint ID</span>
+
+                    <strong id="displayId">
+                        CMP001
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>Submitted By</span>
+
+                    <strong id="displayUser">
+                        Arun Kumar
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>Submitted Date</span>
+
+                    <strong id="displayDate">
+                        15 Aug 2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="successMessage"
+                class="message success">
+
+                Complaint details updated successfully!
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form id="updateComplaintForm">
+
+                <div class="form-grid">
+
+                    <!-- COMPLAINT ID -->
+
+                    <div class="form-group">
+
+                        <label for="complaintId">
+                            Complaint ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="complaintId"
+                            value="CMP001"
+                            readonly
+                        >
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Category
+                        </label>
+
+                        <select id="category" required>
+
+                            <option value="Water">
+                                Water
+                            </option>
+
+                            <option value="Road">
+                                Road
+                            </option>
+
+                            <option value="Electricity">
+                                Electricity
+                            </option>
+
+                            <option value="Sanitation">
+                                Sanitation
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group full-width">
+
+                        <label for="title">
+                            Complaint Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            value="Water supply problem"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full-width">
+
+                        <label for="description">
+                            Complaint Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            required
+                        >There is no proper water supply in our area. The issue has continued for several days.</textarea>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="status">
+                            Complaint Status
+                        </label>
+
+                        <select id="status" required>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="In Progress">
+                                In Progress
+                            </option>
+
+                            <option value="Resolved">
+                                Resolved
+                            </option>
+
+                            <option value="Rejected">
+                                Rejected
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Priority
+                        </label>
+
+                        <select id="priority" required>
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Medium">
+                                Medium
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ASSIGNED STAFF -->
+
+                    <div class="form-group">
+
+                        <label for="staff">
+                            Assigned Staff
+                        </label>
+
+                        <select id="staff" required>
+
+                            <option value="Not Assigned">
+                                Not Assigned
+                            </option>
+
+                            <option value="Staff 1">
+                                Staff 1
+                            </option>
+
+                            <option value="Staff 2">
+                                Staff 2
+                            </option>
+
+                            <option value="Staff 3">
+                                Staff 3
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ADMIN REMARK -->
+
+                    <div class="form-group">
+
+                        <label for="remark">
+                            Admin Remark
+                        </label>
+
+                        <input
+                            type="text"
+                            id="remark"
+                            placeholder="Enter admin remark"
+                        >
+
+                    </div>
+
+
+                    <!-- RESOLUTION -->
+
+                    <div class="form-group full-width">
+
+                        <label for="resolution">
+                            Resolution / Action Taken
+                        </label>
+
+                        <textarea
+                            id="resolution"
+                            placeholder="Enter the action taken to resolve the complaint"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="buttons">
+
+                    <button
+                        type="submit"
+                        class="btn update-btn">
+
+                        Update Complaint
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn cancel-btn"
+                        id="cancelButton">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const form =
+            document.getElementById("updateComplaintForm");
+
+        const successMessage =
+            document.getElementById("successMessage");
+
+        const cancelButton =
+            document.getElementById("cancelButton");
+
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+
+            const complaint = {
+
+                id: document.getElementById("complaintId").value,
+
+                category: document.getElementById("category").value,
+
+                title: document.getElementById("title").value,
+
+                description: document.getElementById("description").value,
+
+                status: document.getElementById("status").value,
+
+                priority: document.getElementById("priority").value,
+
+                staff: document.getElementById("staff").value,
+
+                remark: document.getElementById("remark").value,
+
+                resolution: document.getElementById("resolution").value
+
+            };
+
+
+            localStorage.setItem(
+                "updatedComplaint",
+                JSON.stringify(complaint)
+            );
+
+
+            successMessage.style.display = "block";
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+
+            setTimeout(function() {
+
+                successMessage.style.display = "none";
+
+            }, 3000);
+
+        });
+
+
+        cancelButton.addEventListener("click", function() {
+
+            window.location.href =
+                "manage-complaints.html";
+
+        });
+
+    </script>
+
+</body>
+</html>

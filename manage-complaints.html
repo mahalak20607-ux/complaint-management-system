@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Complaints | CMS</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 21px;
+        }
+
+        .logo p {
+            color: #9ca3af;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 13px;
+            margin-bottom: 8px;
+            border-radius: 7px;
+        }
+
+        .menu a:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .menu a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .logout {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            bottom: 20px;
+        }
+
+        .logout button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 7px;
+            background: #dc2626;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .logout button:hover {
+            background: #b91c1c;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .admin-box {
+            background: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-box span {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        /* FILTER */
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-box h2 {
+            margin-bottom: 18px;
+            font-size: 20px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            height: 42px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            color: #111827;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .clear-btn {
+            height: 42px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 6px;
+            background: #6b7280;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .clear-btn:hover {
+            background: #4b5563;
+        }
+
+        /* TABLE */
+
+        .table-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-header h2 {
+            font-size: 20px;
+        }
+
+        .total-count {
+            color: #6b7280;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th {
+            background: #f3f4f6;
+            padding: 13px;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* BUTTONS */
+
+        .action-btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .view-btn {
+            background: #2563eb;
+        }
+
+        .update-btn {
+            background: #16a34a;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .action-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            width: 420px;
+            max-width: 90%;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            font-size: 25px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .detail {
+            margin-bottom: 15px;
+        }
+
+        .detail strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #newStatus {
+            width: 100%;
+            height: 42px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .save-btn {
+            width: 100%;
+            height: 42px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .filters {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 20px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .header {
+                display: block;
+            }
+
+            .admin-box {
+                margin-top: 15px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <h2>🛡️ CMS Admin</h2>
+
+            <p>
+                Complaint Management System
+            </p>
+
+        </div>
+
+
+        <div class="menu">
+
+            <a href="admin-dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a
+                href="manage-complaints.html"
+                class="active"
+            >
+                📋 Manage Complaints
+            </a>
+
+            <a href="manage-users.html">
+                👥 Manage Users
+            </a>
+
+            <a href="manage-staff.html">
+                👨‍💼 Manage Staff
+            </a>
+
+            <a href="reports.html">
+                📊 Reports
+            </a>
+
+        </div>
+
+
+        <div class="logout">
+
+            <button
+                type="button"
+                onclick="logout()"
+            >
+                🚪 Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    Manage Complaints
+                </h1>
+
+                <p>
+                    View and manage submitted complaints
+                </p>
+
+            </div>
+
+
+            <div class="admin-box">
+
+                Admin:
+                <span id="adminEmail">
+                    admin@gmail.com
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-box">
+
+            <h2>
+                Search & Filter
+            </h2>
+
+
+            <div class="filters">
+
+
+                <!-- SEARCH -->
+
+                <div class="filter-group">
+
+                    <label for="search">
+                        Search Complaint
+                    </label>
+
+                    <input
+                        type="text"
+                        id="search"
+                        placeholder="Search by complaint or user"
+                    >
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="filter-group">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+                    <select id="status">
+
+                        <option value="All">
+                            All Status
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Resolved">
+                            Resolved
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="filter-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select id="category">
+
+                        <option value="All">
+                            All Categories
+                        </option>
+
+                        <option value="Water">
+                            Water
+                        </option>
+
+                        <option value="Road">
+                            Road
+                        </option>
+
+                        <option value="Electricity">
+                            Electricity
+                        </option>
+
+                        <option value="Garbage">
+                            Garbage
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- CLEAR -->
+
+                <button
+                    type="button"
+                    class="clear-btn"
+                    onclick="resetFilters()"
+                >
+                    Clear
+                </button>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLAINT TABLE -->
+
+        <div class="table-box">
+
+
+            <div class="table-header">
+
+                <h2>
+                    All Complaints
+                </h2>
+
+                <div class="total-count">
+
+                    Total:
+                    <strong id="totalCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Complaint
+                        </th>
+
+                        <th>
+                            User
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="complaintTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- UPDATE MODAL -->
+
+    <div
+        class="modal"
+        id="updateModal"
+    >
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h2>
+                    Update Complaint
+                </h2>
+
+                <span
+                    class="close-btn"
+                    onclick="closeModal()"
+                >
+                    &times;
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Complaint ID
+                </strong>
+
+                <p id="modalId"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <strong>
+                    Complaint
+                </strong>
+
+                <p id="modalTitle"></p>
+
+            </div>
+
+
+            <div class="detail">
+
+                <label for="newStatus">
+                    <strong>
+                        Status
+                    </strong>
+                </label>
+
+                <select id="newStatus">
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Resolved">
+                        Resolved
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="save-btn"
+                onclick="saveStatus()"
+            >
+                Save Changes
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        var complaints = [
+
+            {
+                id: "CMP001",
+                title: "Water Supply Issue",
+                user: "Rahul",
+                category: "Water",
+                date: "15-08-2026",
+                status: "Pending"
+            },
+
+            {
+                id: "CMP002",
+                title: "Street Light Problem",
+                user: "Priya",
+                category: "Electricity",
+                date: "14-08-2026",
+                status: "In Progress"
+            },
+
+            {
+                id: "CMP003",
+                title: "Road Damage",
+                user: "Arun",
+                category: "Road",
+                date: "13-08-2026",
+                status: "Resolved"
+            },
+
+            {
+                id: "CMP004",
+                title: "Garbage Collection Problem",
+                user: "Divya",
+                category: "Garbage",
+                date: "12-08-2026",
+                status: "Pending"
+            },
+
+            {
+                id: "CMP005",
+                title: "Electricity Power Cut",
+                user: "Karthik",
+                category: "Electricity",
+                date: "11-08-2026",
+                status: "In Progress"
+            },
+
+            {
+                id: "CMP006",
+                title: "Water Leakage",
+                user: "Anitha",
+                category: "Water",
+                date: "10-08-2026",
+                status: "Resolved"
+            }
+
+        ];
+
+
+        var selectedId = "";
+
+
+        /* DISPLAY COMPLAINTS */
+
+        function showComplaints(data) {
+
+            var table =
+                document.getElementById(
+                    "complaintTable"
+                );
+
+            table.innerHTML = "";
+
+
+            document.getElementById(
+                "totalCount"
+            ).textContent = data.length;
+
+
+            if (data.length === 0) {
+
+                table.innerHTML =
+                    "<tr>" +
+                    "<td colspan='7' style='text-align:center;padding:30px'>" +
+                    "No complaints found" +
+                    "</td>" +
+                    "</tr>";
+
+                return;
+            }
+
+
+            for (
+                var i = 0;
+                i < data.length;
+                i++
+            ) {
+
+                var item = data[i];
+
+                var statusClass = "pending";
+
+
+                if (
+                    item.status === "In Progress"
+                ) {
+
+                    statusClass = "progress";
+
+                }
+
+
+                if (
+                    item.status === "Resolved"
+                ) {
+
+                    statusClass = "resolved";
+
+                }
+
+
+                var row =
+                    document.createElement("tr");
+
+
+                row.innerHTML =
+
+                    "<td>#" +
+                    item.id +
+                    "</td>" +
+
+                    "<td>" +
+                    item.title +
+                    "</td>" +
+
+                    "<td>" +
+                    item.user +
+                    "</td>" +
+
+                    "<td>" +
+                    item.category +
+                    "</td>" +
+
+                    "<td>" +
+                    item.date +
+                    "</td>" +
+
+                    "<td>" +
+
+                    "<span class='status " +
+                    statusClass +
+                    "'>" +
+
+                    item.status +
+
+                    "</span>" +
+
+                    "</td>" +
+
+                    "<td>" +
+
+                    "<button type='button' " +
+                    "class='action-btn view-btn' " +
+                    "onclick=\"viewComplaint('" +
+                    item.id +
+                    "')\">" +
+                    "View" +
+                    "</button>" +
+
+                    "<button type='button' " +
+                    "class='action-btn update-btn' " +
+                    "onclick=\"openModal('" +
+                    item.id +
+                    "')\">" +
+                    "Update" +
+                    "</button>" +
+
+                    "<button type='button' " +
+                    "class='action-btn delete-btn' " +
+                    "onclick=\"deleteComplaint('" +
+                    item.id +
+                    "')\">" +
+                    "Delete" +
+                    "</button>" +
+
+                    "</td>";
+
+
+                table.appendChild(row);
+
+            }
+
+        }
+
+
+        /* FILTER */
+
+        function filterComplaints() {
+
+            var search =
+                document.getElementById(
+                    "search"
+                ).value.toLowerCase();
+
+
+            var status =
+                document.getElementById(
+                    "status"
+                ).value;
+
+
+            var category =
+                document.getElementById(
+                    "category"
+                ).value;
+
+
+            var result = [];
+
+
+            for (
+                var i = 0;
+                i < complaints.length;
+                i++
+            ) {
+
+                var item = complaints[i];
+
+
+                var searchMatch =
+
+                    item.id
+                    .toLowerCase()
+                    .indexOf(search) !== -1
+
+                    ||
+
+                    item.title
+                    .toLowerCase()
+                    .indexOf(search) !== -1
+
+                    ||
+
+                    item.user
+                    .toLowerCase()
+                    .indexOf(search) !== -1;
+
+
+                var statusMatch =
+
+                    status === "All"
+
+                    ||
+
+                    item.status === status;
+
+
+                var categoryMatch =
+
+                    category === "All"
+
+                    ||
+
+                    item.category === category;
+
+
+                if (
+                    searchMatch &&
+                    statusMatch &&
+                    categoryMatch
+                ) {
+
+                    result.push(item);
+
+                }
+
+            }
+
+
+            showComplaints(result);
+
+        }
+
+
+        /* SEARCH */
+
+        document.getElementById(
+            "search"
+        ).addEventListener(
+            "input",
+            filterComplaints
+        );
+
+
+        /* STATUS */
+
+        document.getElementById(
+            "status"
+        ).addEventListener(
+            "change",
+            filterComplaints
+        );
+
+
+        /* CATEGORY */
+
+        document.getElementById(
+            "category"
+        ).addEventListener(
+            "change",
+            filterComplaints
+        );
+
+
+        /* RESET */
+
+        function resetFilters() {
+
+            document.getElementById(
+                "search"
+            ).value = "";
+
+
+            document.getElementById(
+                "status"
+            ).value = "All";
+
+
+            document.getElementById(
+                "category"
+            ).value = "All";
+
+
+            showComplaints(
+                complaints
+            );
+
+        }
+
+
+        /* VIEW */
+
+        function viewComplaint(id) {
+
+            var item = null;
+
+
+            for (
+                var i = 0;
+                i < complaints.length;
+                i++
+            ) {
+
+                if (
+                    complaints[i].id === id
+                ) {
+
+                    item = complaints[i];
+
+                    break;
+
+                }
+
+            }
+
+
+            if (item) {
+
+                alert(
+                    "Complaint ID: #" +
+                    item.id +
+
+                    "\nComplaint: " +
+                    item.title +
+
+                    "\nUser: " +
+                    item.user +
+
+                    "\nCategory: " +
+                    item.category +
+
+                    "\nDate: " +
+                    item.date +
+
+                    "\nStatus: " +
+                    item.status
+                );
+
+            }
+
+        }
+
+
+        /* OPEN MODAL */
+
+        function openModal(id) {
+
+            selectedId = id;
+
+            var item = null;
+
+
+            for (
+                var i = 0;
+                i < complaints.length;
+                i++
+            ) {
+
+                if (
+                    complaints[i].id === id
+                ) {
+
+                    item = complaints[i];
+
+                    break;
+
+                }
+
+            }
+
+
+            if (item) {
+
+                document.getElementById(
+                    "modalId"
+                ).textContent =
+                    "#" + item.id;
+
+
+                document.getElementById(
+                    "modalTitle"
+                ).textContent =
+                    item.title;
+
+
+                document.getElementById(
+                    "newStatus"
+                ).value =
+                    item.status;
+
+
+                document.getElementById(
+                    "updateModal"
+                ).style.display =
+                    "flex";
+
+            }
+
+        }
+
+
+        /* CLOSE MODAL */
+
+        function closeModal() {
+
+            document.getElementById(
+                "updateModal"
+            ).style.display =
+                "none";
+
+            selectedId = "";
+
+        }
+
+
+        /* SAVE STATUS */
+
+        function saveStatus() {
+
+            var newStatus =
+                document.getElementById(
+                    "newStatus"
+                ).value;
+
+
+            for (
+                var i = 0;
+                i < complaints.length;
+                i++
+            ) {
+
+                if (
+                    complaints[i].id === selectedId
+                ) {
+
+                    complaints[i].status =
+                        newStatus;
+
+                    break;
+
+                }
+
+            }
+
+
+            closeModal();
+
+            filterComplaints();
+
+        }
+
+
+        /* DELETE */
+
+        function deleteComplaint(id) {
+
+            var confirmDelete =
+                confirm(
+                    "Delete complaint #" +
+                    id +
+                    "?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            var newList = [];
+
+
+            for (
+                var i = 0;
+                i < complaints.length;
+                i++
+            ) {
+
+                if (
+                    complaints[i].id !== id
+                ) {
+
+                    newList.push(
+                        complaints[i]
+                    );
+
+                }
+
+            }
+
+
+            complaints = newList;
+
+            filterComplaints();
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+
+
+        /* START */
+
+        showComplaints(
+            complaints
+        );
+
+    </script>
+
+</body>
+
+</html>
